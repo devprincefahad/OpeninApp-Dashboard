@@ -1,14 +1,14 @@
 package dev.prince.openinapp_dashboard.local
 
 import android.content.Context
+import dev.prince.openinapp_dashboard.KEY_TOKEN
 import javax.inject.Inject
 
 class SharedPrefHelper @Inject constructor(
-    context: Context,
+    context: Context
 ) {
-    private val sharedPref = context.getSharedPreferences("openinapp-dashboard", Context.MODE_PRIVATE)
 
-    private val KEY_TOKEN = "access_token"
+    private val sharedPref = context.getSharedPreferences("openinapp-dashboard", Context.MODE_PRIVATE)
 
     var token: String?
         get() = getString(KEY_TOKEN)
