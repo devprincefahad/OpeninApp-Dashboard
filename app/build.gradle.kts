@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -20,6 +22,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "ACCESS_TOKEN", "\"${properties.getProperty("ACCESS_TOKEN")}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+
     }
 
     buildTypes {
@@ -39,6 +48,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -74,6 +84,12 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Logcat
+    implementation("com.squareup.logcat:logcat:0.1")
+
+    // OkHttp
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48")
