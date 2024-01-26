@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import dev.prince.openinapp_dashboard.ui.dashboard.DashboardScreen
 import dev.prince.openinapp_dashboard.ui.theme.OpeninAppDashboardTheme
 
 @AndroidEntryPoint
@@ -21,13 +22,7 @@ class MainActivity : ComponentActivity() {
         homeViewModel.getData()
         setContent {
             OpeninAppDashboardTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-
-                }
+                DashboardScreen()
             }
         }
     }
