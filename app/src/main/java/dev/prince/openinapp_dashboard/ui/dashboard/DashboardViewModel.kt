@@ -1,8 +1,13 @@
 package dev.prince.openinapp_dashboard.ui.dashboard
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jaikeerthick.composable_graphs.composables.line.model.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.prince.openinapp_dashboard.R
 import dev.prince.openinapp_dashboard.data.DashboardItem
@@ -80,21 +85,21 @@ class DashboardViewModel @Inject constructor(
         _selectedLinkType.value = linkType
     }
 
-    private val _graphData = MutableStateFlow<Map<String, Int>>(emptyMap())
-    val graphData: Flow<Map<String, Int>> get() = _graphData.asStateFlow()
+    private val _graphData = MutableStateFlow<List<LineData>>(listOf(LineData("Loading", 1)))
+    val graphData: Flow<List<LineData>> get() = _graphData.asStateFlow()
 
-    fun getGraphData() {
+    fun fetchGraphData() {
         viewModelScope.launch {
             try {
                 val response = api.getDashboardData()
                 val overallUrlChart = response.data.overallUrlChart
                 Log.d("chart-data","overallUrlChart viewmodel${overallUrlChart}")
-
-                // all keys value and group
-                // group in month then display
-                // render in dates
-                // mention
-                _graphData.value = overallUrlChart
+                _graphData.emit(overallUrlChart
+                    .entries
+                    .map {
+                        LineData(it.key, it.value)
+                    }
+                    .takeLast(7))
             } catch (e: Exception) {
                 e.printStackTrace()
             }

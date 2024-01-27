@@ -3,6 +3,7 @@ package dev.prince.openinapp_dashboard.ui.bottomnav
 import androidx.annotation.StringRes
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import dev.prince.openinapp_dashboard.R
+import dev.prince.openinapp_dashboard.ui.destinations.AddScreenDestination
 import dev.prince.openinapp_dashboard.ui.destinations.CampaignsScreenDestination
 import dev.prince.openinapp_dashboard.ui.destinations.CoursesScreenDestination
 import dev.prince.openinapp_dashboard.ui.destinations.DashboardScreenDestination
@@ -15,6 +16,7 @@ enum class BottomBarDestination(
 ) {
     Dashboard(DashboardScreenDestination, R.drawable.icon_links, R.string.links),
     Courses(CoursesScreenDestination, R.drawable.icon_courses, R.string.courses),
+    AddScreen(AddScreenDestination, R.drawable.icon_add, R.string.add),
     Campaigns(CampaignsScreenDestination, R.drawable.icon_campaigns, R.string.campaigns),
     Profile(ProfileScreenDestination, R.drawable.icon_profile, R.string.profile),
 }

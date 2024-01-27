@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,7 +35,6 @@ import dev.prince.openinapp_dashboard.ui.NavGraphs
 import dev.prince.openinapp_dashboard.ui.appCurrentDestinationAsState
 import dev.prince.openinapp_dashboard.ui.bottomnav.BottomBar
 import dev.prince.openinapp_dashboard.ui.startAppDestination
-import dev.prince.openinapp_dashboard.ui.theme.Blue
 import dev.prince.openinapp_dashboard.ui.theme.OpeninAppDashboardTheme
 import kotlinx.coroutines.launch
 
@@ -47,8 +48,6 @@ class MainActivity : ComponentActivity() {
                 ScaffoldDefaults.contentWindowInsets
                 val engine = rememberNavHostEngine()
                 val navController = engine.rememberNavController()
-                val destination = navController.appCurrentDestinationAsState().value
-                    ?: NavGraphs.root.startRoute.startAppDestination
 
                 val snackbarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
@@ -61,17 +60,6 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        BottomAppBar(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp), // Add padding to avoid edge clipping
-                            containerColor = Color.White
-                        ) {
-                            BottomBar(navController)
-
-                        }
-                    },
                     snackbarHost = {
                         SnackbarHost(snackbarHostState)
                     }
@@ -79,13 +67,17 @@ class MainActivity : ComponentActivity() {
                     CompositionLocalProvider(
                         LocalSnackbar provides onSnackbarMessageReceived
                     ) {
-                        DestinationsNavHost(
-                            modifier = Modifier
-                                .padding(contentPadding),
-                            navGraph = NavGraphs.root,
-                            navController = navController,
-                            engine = engine
-                        )
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            DestinationsNavHost(
+                                modifier = Modifier
+                                    .padding(contentPadding)
+                                    .weight(1f),
+                                navGraph = NavGraphs.root,
+                                navController = navController,
+                                engine = engine
+                            )
+                            BottomBar(navController)
+                        }
                     }
                 }
             }

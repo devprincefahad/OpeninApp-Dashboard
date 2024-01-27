@@ -92,7 +92,7 @@ fun DashboardScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getGraphData()
+        viewModel.fetchGraphData()
     }
 
     var showAllItems by remember { mutableStateOf(false) }
@@ -200,23 +200,10 @@ fun DashboardScreen(
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    val chartData = viewModel.graphData.collectAsState(initial = emptyMap())
-
-                    val last5Entries = chartData.value.entries.toList().takeLast(5)
-
-                    val lineDataList = last5Entries.map { entry ->
-                        val yValue = try {
-                            entry.value.toDouble()
-                        } catch (e: NumberFormatException) {
-                            0.0
-                        }
-                        LineData(x = entry.key.toString(), y = yValue)
-                    }
-
                     LineGraph(
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 12.dp),
-                        data = lineDataList,
+                        data = viewModel.graphData.collectAsState(listOf(LineData("Loading", 1))).value,
                         onPointClick = {
                             // do something with value
                         },
