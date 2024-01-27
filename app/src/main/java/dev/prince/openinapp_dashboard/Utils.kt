@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -71,4 +72,16 @@ class NoRippleInteractionSource : MutableInteractionSource {
 
     override fun tryEmit(interaction: Interaction) = true
 
+}
+
+
+fun getGreeting(): String {
+    val calendar = Calendar.getInstance()
+    val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+
+    return when {
+        hourOfDay < 12 -> "Good morning"
+        hourOfDay < 18 -> "Good afternoon"
+        else -> "Good evening"
+    }
 }

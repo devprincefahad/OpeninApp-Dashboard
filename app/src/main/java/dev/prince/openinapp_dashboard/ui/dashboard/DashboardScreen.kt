@@ -3,7 +3,6 @@ package dev.prince.openinapp_dashboard.ui.dashboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.prince.openinapp_dashboard.LocalSnackbar
 import dev.prince.openinapp_dashboard.NoRippleInteractionSource
 import dev.prince.openinapp_dashboard.R
-import dev.prince.openinapp_dashboard.data.Link
+import dev.prince.openinapp_dashboard.getGreeting
 import dev.prince.openinapp_dashboard.ui.BoxWithImageAndText
 import dev.prince.openinapp_dashboard.ui.LinkItemUI
 import dev.prince.openinapp_dashboard.ui.LinkTypeText
@@ -151,7 +149,7 @@ fun DashboardScreen(
                         top = 16.dp,
                         start = 16.dp
                     ),
-                    text = "Good Morning",
+                    text = getGreeting(),
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = figTreeFamily,
@@ -233,6 +231,9 @@ fun DashboardScreen(
 
                     Icon(
                         modifier = modifier
+                            .noRippleClickable {
+                                viewModel.showMessage("Search")
+                            }
                             .size(46.dp)
                             .padding(start = 8.dp),
                         painter = painterResource(R.drawable.icon_search),
