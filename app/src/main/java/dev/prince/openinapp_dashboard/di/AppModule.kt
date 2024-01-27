@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.prince.openinapp_dashboard.BASE_URL
+import dev.prince.openinapp_dashboard.util.BASE_URL
 import dev.prince.openinapp_dashboard.local.SharedPrefHelper
 import dev.prince.openinapp_dashboard.network.ApiService
 import okhttp3.OkHttpClient

@@ -1,5 +1,9 @@
-package dev.prince.openinapp_dashboard
+package dev.prince.openinapp_dashboard.util
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.compositionLocalOf
@@ -8,9 +12,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import dev.prince.openinapp_dashboard.ui.destinations.CoursesScreenDestination
-import dev.prince.openinapp_dashboard.ui.destinations.DashboardScreenDestination
-import dev.prince.openinapp_dashboard.ui.destinations.Destination
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -89,6 +90,43 @@ fun getGreeting(): String {
     }
 }
 
+fun formatDate(inputDate: String): String {
+    return try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        outputFormat.format(date ?: inputDate)
+    } catch (e: ParseException) {
+        inputDate
+    }
+}
+
+fun isInternetAvailable(context: Context): Boolean {
+    var result = false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val networkCapabilities = connectivityManager.activeNetwork ?: return false
+        val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+        result = when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    } else {
+        connectivityManager.run {
+            connectivityManager.activeNetworkInfo?.run {
+                result = when (type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> false
+                }
+            }
+        }
+    }
+    return result
+}
 /*fun Destination.shouldShowBottomBar(): Boolean {
     /* Add those destinations where bottombar should not be visible */
     return (this !in listOf(

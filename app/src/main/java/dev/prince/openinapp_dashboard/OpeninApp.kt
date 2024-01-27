@@ -4,10 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
 import dagger.hilt.android.HiltAndroidApp
-import dev.prince.openinapp_dashboard.local.SharedPrefHelper
+import dev.prince.openinapp_dashboard.util.ACCESS_TOKEN
+import dev.prince.openinapp_dashboard.util.KEY_TOKEN
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
-import javax.inject.Inject
 
 @HiltAndroidApp
 class OpeninApp : Application() {

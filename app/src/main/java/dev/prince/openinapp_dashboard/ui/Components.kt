@@ -5,16 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,9 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import dev.prince.openinapp_dashboard.R
-import dev.prince.openinapp_dashboard.convertDateFormat
+import dev.prince.openinapp_dashboard.util.convertDateFormat
 import dev.prince.openinapp_dashboard.data.Link
-import dev.prince.openinapp_dashboard.shortenText
+import dev.prince.openinapp_dashboard.util.shortenText
 import dev.prince.openinapp_dashboard.ui.dashboard.DashboardViewModel
 import dev.prince.openinapp_dashboard.ui.theme.Blue
 import dev.prince.openinapp_dashboard.ui.theme.DarkWhite
@@ -304,4 +307,20 @@ fun Modifier.dashedBorder(
         style = stroke,
         color = color
     )
+}
+
+@Composable
+fun ColumnProgressIndicator() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator(
+            color = Blue,
+            modifier = Modifier
+                .size(36.dp)
+        )
+    }
 }

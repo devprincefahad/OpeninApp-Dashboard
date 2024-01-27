@@ -1,10 +1,5 @@
 package dev.prince.openinapp_dashboard.ui.dashboard
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jaikeerthick.composable_graphs.composables.line.model.LineData
@@ -13,7 +8,8 @@ import dev.prince.openinapp_dashboard.R
 import dev.prince.openinapp_dashboard.data.DashboardItem
 import dev.prince.openinapp_dashboard.data.Link
 import dev.prince.openinapp_dashboard.network.ApiService
-import dev.prince.openinapp_dashboard.oneShotFlow
+import dev.prince.openinapp_dashboard.util.formatDate
+import dev.prince.openinapp_dashboard.util.oneShotFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,6 +40,9 @@ class DashboardViewModel @Inject constructor(
 
     private val _recentLinks = MutableStateFlow<List<Link>>(emptyList())
     val recentLinks: StateFlow<List<Link>> = _recentLinks
+
+    private val _graphData = MutableStateFlow<List<LineData>>(listOf(LineData("Loading", 1)))
+    val graphData: Flow<List<LineData>> get() = _graphData.asStateFlow()
 
     fun showMessage(text: String) {
         messages.tryEmit(text)
@@ -85,19 +84,15 @@ class DashboardViewModel @Inject constructor(
         _selectedLinkType.value = linkType
     }
 
-    private val _graphData = MutableStateFlow<List<LineData>>(listOf(LineData("Loading", 1)))
-    val graphData: Flow<List<LineData>> get() = _graphData.asStateFlow()
-
     fun fetchGraphData() {
         viewModelScope.launch {
             try {
                 val response = api.getDashboardData()
                 val overallUrlChart = response.data.overallUrlChart
-                Log.d("chart-data","overallUrlChart viewmodel${overallUrlChart}")
                 _graphData.emit(overallUrlChart
                     .entries
                     .map {
-                        LineData(it.key, it.value)
+                        LineData(formatDate(it.key), it.value)
                     }
                     .takeLast(7))
             } catch (e: Exception) {

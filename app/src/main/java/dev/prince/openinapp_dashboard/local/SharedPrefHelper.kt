@@ -1,7 +1,7 @@
 package dev.prince.openinapp_dashboard.local
 
 import android.content.Context
-import dev.prince.openinapp_dashboard.KEY_TOKEN
+import dev.prince.openinapp_dashboard.util.KEY_TOKEN
 import javax.inject.Inject
 
 class SharedPrefHelper @Inject constructor(
