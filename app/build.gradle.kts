@@ -103,7 +103,8 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:core:1.9.52")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.52")
 
-//    // Graph
-//    implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.2")
+    // Graph
+    implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.3")
+//    implementation("com.github.md0092651:PlotWizard:0.0.10-alpha")
 
 }

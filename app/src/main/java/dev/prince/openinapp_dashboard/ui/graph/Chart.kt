@@ -1,45 +1,5 @@
 package dev.prince.openinapp_dashboard.ui.graph
 
-import android.graphics.Paint
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import dev.prince.openinapp_dashboard.R
-import dev.prince.openinapp_dashboard.data.OverallUrlChart
-import dev.prince.openinapp_dashboard.ui.theme.Blue
-import java.text.DateFormatSymbols
-import java.text.SimpleDateFormat
-import java.util.Locale
-import kotlin.math.round
-import kotlin.math.roundToInt
 /*
 @Composable
 fun Chart(
@@ -140,7 +100,7 @@ fun Chart(
     }
 }*/
 
-@Composable
+/*@Composable
 fun LineChart(chartData: Map<String, Int>) {
     val maxValue = chartData.values.maxOrNull() ?: 0
 
@@ -227,4 +187,171 @@ fun MonthlyData(chartData: Map<String, Int>) {
             }
         }
     }
-}
+}*/
+/*
+@Composable
+fun LineChart(chartData: Map<String, Int>) {
+    val maxYValue = 100
+    val gapY = 25
+    val maxXValue = chartData.size
+    val gapX = 1
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        // Draw Y-axis
+        drawLine(
+            start = Offset(50f, 50f),
+            end = Offset(50f, size.height - 50f),
+            color = Color.Black
+        )
+
+        // Draw Y-axis scale
+        for (i in 0..maxYValue step gapY) {
+            val yPos = size.height - 50f - (i.toFloat() / maxYValue) * (size.height - 100f)
+            drawLine(
+                start = Offset(50f, yPos),
+                end = Offset(45f, yPos),
+                color = Color.Black
+            )
+
+            drawText(
+                text = i.toString(),
+                color = Color.Black,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Right,
+                modifier = Modifier.offset(30.dp, yPos - 6.dp)
+            )
+        }
+
+        // Draw X-axis
+        drawLine(
+            start = Offset(50f, size.height - 50f),
+            end = Offset(size.width - 50f, size.height - 50f),
+            color = Color.Black
+        )
+
+        // Draw X-axis scale and data points
+        var xPos = 50f
+        chartData.forEachIndexed { index, (date, clicks) ->
+            val yPos = size.height - 50f - (clicks.toFloat() / maxYValue) * (size.height - 100f)
+
+            drawLine(
+                start = Offset(xPos, size.height - 50f),
+                end = Offset(xPos, yPos),
+                color = Color.Blue
+            )
+
+            drawText(
+                text = date,
+                color = Color.Black,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.offset(x = xPos - 20.dp, y = size.height - 30.dp)
+            )
+
+            xPos += (size.width - 100f) / maxXValue
+        }
+    }
+}*/
+/*
+@Composable
+fun LineGraph(chartData: Map<String, Int>) {
+    val maxYValue = 100f
+    val yStep = 25f
+    val maxXValue = 31f
+    val xStep = 4f
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Line Graph", style = MaterialTheme.typography.bodySmall)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawLine(
+                    start = Offset(0f, 0f),
+                    end = Offset(0f, size.height),
+                    color = Color.Black,
+                    strokeWidth = 2.dp.toPx(),
+                )
+
+                drawLine(
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    color = Color.Black,
+                    strokeWidth = 2.dp.toPx(),
+                )
+
+                val yStepPixels = (size.height / maxYValue) * yStep
+                val xStepPixels = (size.width / maxXValue) * xStep
+
+                for (i in 0..4) {
+                    val y = i * yStepPixels
+                    drawLine(
+                        start = Offset(0f, size.height - y),
+                        end = Offset(-8f, size.height - y),
+                        color = Color.Black,
+                        strokeWidth = 2.dp.toPx(),
+                    )
+
+                    drawText(
+                        text = "${i * 25}",
+                        offset = Offset(-32f, size.height - y),
+                        color = Color.Black,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+
+                for (i in 1..8) {
+                    val x = i * xStepPixels
+                    drawLine(
+                        start = Offset(x, size.height),
+                        end = Offset(x, size.height + 8f),
+                        color = Color.Black,
+                        strokeWidth = 2.dp.toPx(),
+                    )
+
+                    drawText(
+                        text = "${i * 4}",
+                        offset = Offset(x - 8f, size.height + 24f),
+                        color = Color.Black,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+
+                val points = chartData.map { entry ->
+                    val date = entry.key
+                    val value = entry.value.toFloat()
+
+                    val dayOfMonth = SimpleDateFormat("yyyy-MM-dd").parse(date)?.day ?: 1
+
+                    Offset(dayOfMonth * xStepPixels, size.height - (value / maxYValue) * size.height)
+                }
+
+                drawPoints(
+                    points = points,
+                    color = Color.Blue,
+                    strokeWidth = 4.dp.toPx(),
+                )
+
+                drawPath(
+                    points = points,
+                    color = Color.Blue,
+                    strokeWidth = 2.dp.toPx(),
+                    pathEffect = null
+                )
+            }
+        }
+    }
+}*/

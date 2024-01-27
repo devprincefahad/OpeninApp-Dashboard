@@ -44,6 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jaikeerthick.composable_graphs.composables.line.LineGraph
+import com.jaikeerthick.composable_graphs.composables.line.model.LineData
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import dev.prince.openinapp_dashboard.LocalSnackbar
@@ -54,8 +56,6 @@ import dev.prince.openinapp_dashboard.ui.BoxWithImageAndText
 import dev.prince.openinapp_dashboard.ui.LinkItemUI
 import dev.prince.openinapp_dashboard.ui.LinkTypeText
 import dev.prince.openinapp_dashboard.ui.SheetSurface
-import dev.prince.openinapp_dashboard.ui.graph.LineChart
-import dev.prince.openinapp_dashboard.ui.graph.MonthlyData
 import dev.prince.openinapp_dashboard.ui.noRippleClickable
 import dev.prince.openinapp_dashboard.ui.theme.Blue
 import dev.prince.openinapp_dashboard.ui.theme.figTreeFamily
@@ -200,13 +200,27 @@ fun DashboardScreen(
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-//                    val chartData = viewModel.overallUrlChartData.value
-//                    Log.d("chart-data", "${chartData?.entries}")
-//                    chartData?.let { LineChart(it.chartData) }
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Text("Monthly Data", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-//                    Spacer(modifier = Modifier.height(8.dp))
-//                    chartData?.let { MonthlyData(it.chartData) }
+                    val chartData = viewModel.graphData.collectAsState(initial = emptyMap())
+
+                    val last5Entries = chartData.value.entries.toList().takeLast(5)
+
+                    val lineDataList = last5Entries.map { entry ->
+                        val yValue = try {
+                            entry.value.toDouble()
+                        } catch (e: NumberFormatException) {
+                            0.0
+                        }
+                        LineData(x = entry.key.toString(), y = yValue)
+                    }
+
+                    LineGraph(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        data = lineDataList,
+                        onPointClick = {
+                            // do something with value
+                        },
+                    )
                 }
 
                 LazyRow(

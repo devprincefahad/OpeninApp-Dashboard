@@ -7,11 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.prince.openinapp_dashboard.R
 import dev.prince.openinapp_dashboard.data.DashboardItem
 import dev.prince.openinapp_dashboard.data.Link
-import dev.prince.openinapp_dashboard.data.OverallUrlChart
 import dev.prince.openinapp_dashboard.network.ApiService
 import dev.prince.openinapp_dashboard.oneShotFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -79,19 +80,21 @@ class DashboardViewModel @Inject constructor(
         _selectedLinkType.value = linkType
     }
 
-
-    private val _overallUrlChartData = MutableStateFlow<OverallUrlChart?>(null)
-    val overallUrlChartData: StateFlow<OverallUrlChart?> get() = _overallUrlChartData
+    private val _graphData = MutableStateFlow<Map<String, Int>>(emptyMap())
+    val graphData: Flow<Map<String, Int>> get() = _graphData.asStateFlow()
 
     fun getGraphData() {
         viewModelScope.launch {
             try {
                 val response = api.getDashboardData()
-                Log.d("chart-data","${response.data.overallUrlChart.keys}")
+                val overallUrlChart = response.data.overallUrlChart
+                Log.d("chart-data","overallUrlChart viewmodel${overallUrlChart}")
+
                 // all keys value and group
                 // group in month then display
-                //render in dates
-                //mention
+                // render in dates
+                // mention
+                _graphData.value = overallUrlChart
             } catch (e: Exception) {
                 e.printStackTrace()
             }
