@@ -6,7 +6,7 @@ data class Data(
     @SerializedName("favourite_links")
     val favouriteLinks: List<String>,
     @SerializedName("overall_url_chart")
-    val overallUrlChart: OverallUrlChart,
+    val overallUrlChart: Map<String, Int>,
     @SerializedName("recent_links")
     val recentLinks: List<Link>,
     @SerializedName("top_links")

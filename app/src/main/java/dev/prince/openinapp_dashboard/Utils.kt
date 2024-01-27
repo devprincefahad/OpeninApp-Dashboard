@@ -8,6 +8,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import dev.prince.openinapp_dashboard.ui.destinations.CoursesScreenDestination
+import dev.prince.openinapp_dashboard.ui.destinations.DashboardScreenDestination
+import dev.prince.openinapp_dashboard.ui.destinations.Destination
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -85,3 +88,11 @@ fun getGreeting(): String {
         else -> "Good evening"
     }
 }
+
+/*fun Destination.shouldShowBottomBar(): Boolean {
+    /* Add those destinations where bottombar should not be visible */
+    return (this !in listOf(
+
+    ))
+}
+*/

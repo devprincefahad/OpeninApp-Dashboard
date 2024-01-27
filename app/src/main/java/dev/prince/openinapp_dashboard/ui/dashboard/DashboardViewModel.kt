@@ -1,11 +1,13 @@
 package dev.prince.openinapp_dashboard.ui.dashboard
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.prince.openinapp_dashboard.R
 import dev.prince.openinapp_dashboard.data.DashboardItem
 import dev.prince.openinapp_dashboard.data.Link
+import dev.prince.openinapp_dashboard.data.OverallUrlChart
 import dev.prince.openinapp_dashboard.network.ApiService
 import dev.prince.openinapp_dashboard.oneShotFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,6 +77,25 @@ class DashboardViewModel @Inject constructor(
 
     fun selectLinkType(linkType: LinkType) {
         _selectedLinkType.value = linkType
+    }
+
+
+    private val _overallUrlChartData = MutableStateFlow<OverallUrlChart?>(null)
+    val overallUrlChartData: StateFlow<OverallUrlChart?> get() = _overallUrlChartData
+
+    fun getGraphData() {
+        viewModelScope.launch {
+            try {
+                val response = api.getDashboardData()
+                Log.d("chart-data","${response.data.overallUrlChart.keys}")
+                // all keys value and group
+                // group in month then display
+                //render in dates
+                //mention
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
 }

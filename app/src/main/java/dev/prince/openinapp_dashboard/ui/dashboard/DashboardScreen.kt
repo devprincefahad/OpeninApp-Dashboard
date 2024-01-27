@@ -1,5 +1,7 @@
 package dev.prince.openinapp_dashboard.ui.dashboard
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,6 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import dev.prince.openinapp_dashboard.LocalSnackbar
 import dev.prince.openinapp_dashboard.NoRippleInteractionSource
 import dev.prince.openinapp_dashboard.R
@@ -49,13 +54,18 @@ import dev.prince.openinapp_dashboard.ui.BoxWithImageAndText
 import dev.prince.openinapp_dashboard.ui.LinkItemUI
 import dev.prince.openinapp_dashboard.ui.LinkTypeText
 import dev.prince.openinapp_dashboard.ui.SheetSurface
+import dev.prince.openinapp_dashboard.ui.graph.LineChart
+import dev.prince.openinapp_dashboard.ui.graph.MonthlyData
 import dev.prince.openinapp_dashboard.ui.noRippleClickable
 import dev.prince.openinapp_dashboard.ui.theme.Blue
 import dev.prince.openinapp_dashboard.ui.theme.figTreeFamily
+import logcat.logcat
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
+@RootNavGraph(start = true)
+@Destination
 fun DashboardScreen(
-    modifier: Modifier,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     // Items in Dashboard
@@ -81,18 +91,22 @@ fun DashboardScreen(
         viewModel.loadLinks()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getGraphData()
+    }
+
     var showAllItems by remember { mutableStateOf(false) }
 
     var showButton by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(color = Blue)
             .verticalScroll(rememberScrollState())
     ) {
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     top = 32.dp, bottom = 22.dp,
@@ -111,10 +125,10 @@ fun DashboardScreen(
                 ),
             )
 
-            Spacer(modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
 
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .background(
                         color = Color.White.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(12.dp)
@@ -136,16 +150,16 @@ fun DashboardScreen(
         }
 
         SheetSurface(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
 
             Column {
-                Spacer(modifier.width(16.dp))
+                Spacer(Modifier.width(16.dp))
 
                 Text(
-                    modifier = modifier.padding(
+                    modifier = Modifier.padding(
                         top = 16.dp,
                         start = 16.dp
                     ),
@@ -159,13 +173,13 @@ fun DashboardScreen(
                 )
 
                 Row(
-                    modifier = modifier.padding(
+                    modifier = Modifier.padding(
                         top = 8.dp,
                         start = 16.dp
                     )
                 ) {
                     Text(
-                        modifier = modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = 8.dp),
                         text = "Ajay Manva",
                         style = TextStyle(
                             fontSize = 26.sp,
@@ -177,12 +191,26 @@ fun DashboardScreen(
                     Image(
                         painter = painterResource(id = R.drawable.icon_hi),
                         contentDescription = "Emoji",
-                        modifier = modifier.size(26.dp)
+                        modifier = Modifier.size(26.dp)
                     )
                 }
 
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+//                    val chartData = viewModel.overallUrlChartData.value
+//                    Log.d("chart-data", "${chartData?.entries}")
+//                    chartData?.let { LineChart(it.chartData) }
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    Text("Monthly Data", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+//                    Spacer(modifier = Modifier.height(8.dp))
+//                    chartData?.let { MonthlyData(it.chartData) }
+                }
+
                 LazyRow(
-                    modifier = modifier.padding(
+                    modifier = Modifier.padding(
                         top = 8.dp,
                         start = 8.dp
                     )
@@ -198,7 +226,7 @@ fun DashboardScreen(
                 }
 
                 ButtonTransparent(
-                    modifier = modifier,
+                    modifier = Modifier,
                     icon = R.drawable.icon_arrows,
                     btnText = "View Analytics",
                     onClick = {
@@ -207,7 +235,7 @@ fun DashboardScreen(
                 )
 
                 Row(
-                    modifier = modifier.padding(
+                    modifier = Modifier.padding(
                         start = 16.dp, end = 16.dp,
                         top = 18.dp, bottom = 8.dp
                     ),
@@ -227,10 +255,10 @@ fun DashboardScreen(
                         viewModel.selectLinkType(LinkType.RECENT_LINKS)
                     }
 
-                    Spacer(modifier.weight(1f))
+                    Spacer(Modifier.weight(1f))
 
                     Icon(
-                        modifier = modifier
+                        modifier = Modifier
                             .noRippleClickable {
                                 viewModel.showMessage("Search")
                             }
@@ -244,7 +272,7 @@ fun DashboardScreen(
                 }
 
                 LazyColumn(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(if (showAllItems) 750.dp else 600.dp)
                         .padding(
                             top = 8.dp,
@@ -271,7 +299,7 @@ fun DashboardScreen(
                 }
                 if (showButton && !showAllItems) {
                     ButtonTransparent(
-                        modifier = modifier,
+                        modifier = Modifier,
                         onClick = {
                             showAllItems = true
                         },
@@ -281,7 +309,7 @@ fun DashboardScreen(
                 }
 
                 ColoredButton(
-                    modifier = modifier,
+                    modifier = Modifier,
                     icon = R.drawable.icon_whatsapp,
                     btnText = "Talk with us",
                     onClick = {
@@ -292,7 +320,7 @@ fun DashboardScreen(
                 )
 
                 ColoredButton(
-                    modifier = modifier,
+                    modifier = Modifier,
                     icon = R.drawable.icon_feedback,
                     btnText = "Frequently Asked Questions",
                     onClick = {

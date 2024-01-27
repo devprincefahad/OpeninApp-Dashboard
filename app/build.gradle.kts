@@ -41,11 +41,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         buildConfig = true
@@ -98,5 +98,12 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    // Compose Nav Destinations
+    implementation("io.github.raamcosta.compose-destinations:core:1.9.52")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.52")
+
+//    // Graph
+//    implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.2")
 
 }
