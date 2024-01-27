@@ -8,7 +8,7 @@ data class Data(
     @SerializedName("overall_url_chart")
     val overallUrlChart: OverallUrlChart,
     @SerializedName("recent_links")
-    val recentLinks: List<RecentLink>,
+    val recentLinks: List<Link>,
     @SerializedName("top_links")
-    val topLinks: List<TopLink>
+    val topLinks: List<Link>
 )

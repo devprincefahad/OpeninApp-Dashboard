@@ -2,7 +2,7 @@ package dev.prince.openinapp_dashboard.data
 
 import com.google.gson.annotations.SerializedName
 
-data class TopLink(
+data class Link(
     val app: String,
     @SerializedName("created_at")
     val createdAt: String,
